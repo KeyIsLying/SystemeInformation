@@ -54,7 +54,10 @@ il suffit de modifier le nom de la variable "utilisateur" dans l'URL par le nom 
 Ex : localhost:5000/historique/Utilisateur1
 
 ### Attaquer le système en modifiant directement le fichier de données, en changeant le montant d'une transaction.
-
+Le programme enregistre en clair toutes les transactions dans un fichier <i>.csv </i> externe. <br/>
+Ainsi, on peut facilement modifier n'importe quelle variable opperant sur une transaction ; emetteur, recepteur ou montant. <br/>
+La modification d'une de ces variables dans le fichier <i>.csv </i> fait que la modification a directement lieu sur la transaction : <br/>
+Ex : Si l'on modifie le montant de la transaction dans le fichier de sauvegarde, lors de n'importe quelle requête permettant d'afficher la transaction, la modification apparaitra. Ainsi, le solde ainsi que l'historique des deux utilisateurs seront touchés.
 
 ## Tchaî V2
 ### Intégrer une nouvelle structure de transaction
