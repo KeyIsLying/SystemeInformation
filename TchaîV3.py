@@ -82,7 +82,7 @@ def NewTransaction(emetteur, recepteur, montant):
 
     with open(fichier, 'a', newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=';')
-        writer.writerow([emetteur, recepteur, montant, dt_string, hashed, previousHash])
+        writer.writerow([emetteur, recepteur, montant, dt_string, hashed])
     return 'Nouvelle transaction entre ' + emetteur + ' et ' + recepteur + ' de ' + montant + ' le ' + dt_string + ' .\n', 200
     # Création d'une nouvelle transaction : curl -X GET localhost:5000/new_Transac/clement/hugo/50
 

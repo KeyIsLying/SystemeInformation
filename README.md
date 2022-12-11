@@ -98,7 +98,15 @@ Pour ce qui est du risque de double dépense, nous ne sommes pas confronté à c
 
 ## Tchaî V3
 ### Modifier la méthode de calcul du hash
-### Réexecuter les attaques précédentes
-### Attaquer le système en ajoutant une transaction
+A partir de maintenant, la valeur du hash d'une nouvelle transaction va, en plus des valeurs de la transaction en cours, prendre la valeur du hash de la transaction précédente.<br/>
+Ainsi, lors d'une nouvelle transaction, nous executons notre fonction de hashage sur 5 variables : emetteur, recepteur, montant, date/heure et le hash précédent.<br/>
+Cela peux poser un porblème lorsque la liste de transaction est vide et que l'on souhaite créer notre première transaction. Ainsi nous ajoutons une exeption lors de la première et plaçons comme valeur de hash précédente la valeur 0.<br/>
+Ex de première transaction : Personne1, Personne2, montant, date et heure, HASH(calculé avec les valeurs ci-avant et le hash précédent, ici '0').<br/>
 
-## Tchaî Cryptographique (V4)
+### Réexecuter les attaques précédentes
+Lorsque nous décidons d'attaquer directement notre fichier en modifiant une valeur, la fonction de vérification va détecter une anomalie est afficher que l'integrité des données n'est pas valide.<br/>
+Lorsque nous décidons d'attaquer directement notre fichier en supprimant une transaction, la fonction de vérification va égualement détecter une anomalie est afficher le même message.
+### Attaquer le système en ajoutant une transaction
+Maintenant, testons une nouvelle attaque. Celle_ci consiste en l'ajout d'un transaction directement dans le fichier de données.
+Si le hash entré dans la <i>nouvelle transaction</i> ne respecte pas le hash de la transaction précédente, la vérification des données va détecter l'anomalie est afficher que l'intégrité des données n'est pas valide.<br/>
+Si le hash est correcte et respecte lors de son calcul la valeur du hash précédent, la vérification ne va pas détecter d'anomalie et va afficher que l'intégrité des données ets valide.
