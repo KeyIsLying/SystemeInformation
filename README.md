@@ -11,7 +11,7 @@ Concevoir un système de transaction éléctroniques avec une intégrité garant
 Il est possible d'enregistrer une transaction à l'aide d'une requête HTTP. <br />
 <p>
 En utilisant une requête via le CMD:<br />
-- curl -X localhost:5000/new_Transac/<débité>/<crédité>/<montant>
+- curl -X localhost:5000/new_Transac/'<débité>'/'<crédité>'/'<montant>'
 </p><p>
 Ou en utilisant directement la barre de recherche du navigateur:<br />
 - localhost:5000/new_Transac/<débité>/<crédité>/<montant>
