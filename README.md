@@ -11,10 +11,10 @@ Concevoir un système de transaction éléctroniques avec une intégrité garant
 Il est possible d'enregistrer une transaction à l'aide d'une requête HTTP. <br />
 <p>
 En utilisant une requête via le CMD:<br />
-- curl -X localhost:5000/new_Transac/'<débité>'/'<crédité>'/'<montant>'
+- curl -X localhost:5000/new_Transac/Utilisateur1/Utilisateur2/montant
 </p><p>
 Ou en utilisant directement la barre de recherche du navigateur:<br />
-- localhost:5000/new_Transac/<débité>/<crédité>/<montant>
+- localhost:5000/new_Transac/Utilisateur1/Utilisateur2/montant
 </p>
 Il suffit de modifier le nom des variables dans l'URL par les noms de variables souhaitées.<br />
 Ex : localhost:5000/new_Transac/Utilisateur1/Utilisateur2/30
@@ -33,31 +33,33 @@ Ou en utilisant directement la barre de recherche du navigateur:<br />
 Il est possible d'afficher une liste de transaction d'un utilisateur à l'aide d'une requête HTTP. <br />
 <p>
 En utilisant une requête via le CMD:<br />
-- curl -X localhost:5000/historique/<utilisateur>
+- curl -X localhost:5000/historique/Utilisateur
 </p><p>
 Ou en utilisant directement la barre de recherche du navigateur:<br />
-- localhost:5000/historique/<utilisateur>
+- localhost:5000/historique/Utilisateur
 </p>
 Il suffit de modifier le nom de la variable "utilisateur" dans l'URL par le nom d'un utilisateur deja enregistré dans la liste.<br />
-Ex : localhost:5000/historique/Utilisateur1
+Ex : localhost:5000/historique/Utilisateur
 
 ### Afficher le solde du compte de la personne données
 Il est possible de calculer et d'afficher le solde d'un utilisateur à l'aide d'une requête HTTP. <br/>
 <p>
 En utilisant une requête via le CMD:<br/>
-- curl -X localhost:5000/solde/<utilisateur
+- curl -X localhost:5000/solde/Utilisateur
 </p><p>
 Ou en utilisant directement la barre de recherche du navigateur:<br/>
-- localhost:5000/solde/<utilisateur>
+- localhost:5000/solde/Utilisateur
 </p>
 il suffit de modifier le nom de la variable "utilisateur" dans l'URL par le nom d'un uitilisateur déja enregistré dans la liste. <br/>
-Ex : localhost:5000/historique/Utilisateur1
+Ex : localhost:5000/solde/Utilisateur
 
 ### Attaquer le système en modifiant directement le fichier de données, en changeant le montant d'une transaction.
 Le programme enregistre en clair toutes les transactions dans un fichier <i>.csv </i> externe. <br/>
 Ainsi, on peut facilement modifier n'importe quelle variable opperant sur une transaction ; emetteur, recepteur ou montant. <br/>
 La modification d'une de ces variables dans le fichier <i>.csv </i> fait que la modification a directement lieu sur la transaction : <br/>
-Ex : Si l'on modifie le montant de la transaction dans le fichier de sauvegarde, lors de n'importe quelle requête permettant d'afficher la transaction, la modification apparaitra. Ainsi, le solde ainsi que l'historique des deux utilisateurs seront touchés.
+Ex : Si l'on modifie le montant de la transaction dans le fichier de sauvegarde, lors de n'importe quelle requête permettant d'afficher la transaction, la modification apparaitra. Ainsi, le solde et l'historique des deux utilisateurs seront touchés.
+
+
 
 ## Tchaî V2
 ### Intégrer une nouvelle structure de transaction
@@ -71,14 +73,13 @@ Pour utiliser cette fonction sur une variable de type tuple, il faut d'abord con
 <br/><br/>
 Ainsi, notre nouvelle structure de transaction est opérationelle.
 
-[...]
-
 ### Vérification de l'intégrité des données
 Vérifier l’intégrité des données en recalculant les hashs à partir des données et en les comparant
 avec les hashs stockés précédemment.
 
 Maintenant que la structure des transactions à été modifié, il nous faut vérifier l'intégrité de nos données pour prévenir d'une éventuelle attaque.<br/>
 Pour ce faire, nous allons récupérer le hash stocké dans notre base de donnée et le comparer avec un hash nouvellement calculé à partir des mêmes données en entrée.<br/>
+La vérification de l'intégrité des données aura lieu à chaques fois que l'on affiche la page d'accueil contenant la liste de toutes les transactions réalisé jusqu'à maintenant.<br/>
 <p>
 - Si les deux hashs sont identiques, la transaction est valide.<br/>
 - Sinon, il y a non validité dans les données.</p>
@@ -96,12 +97,16 @@ En modifiant directement le fichier de données, en supprimant une ligne corresp
 En théorie, l'intégrité des données ne devrait plus etre valide, or ici ce n'est pas le cas.<br/>
 Pour ce qui est du risque de double dépense, nous ne sommes pas confronté à ca problème.
 
+
+
 ## Tchaî V3
 ### Modifier la méthode de calcul du hash
 A partir de maintenant, la valeur du hash d'une nouvelle transaction va, en plus des valeurs de la transaction en cours, prendre la valeur du hash de la transaction précédente.<br/>
 Ainsi, lors d'une nouvelle transaction, nous executons notre fonction de hashage sur 5 variables : emetteur, recepteur, montant, date/heure et le hash précédent.<br/>
 Cela peux poser un porblème lorsque la liste de transaction est vide et que l'on souhaite créer notre première transaction. Ainsi nous ajoutons une exeption lors de la première et plaçons comme valeur de hash précédente la valeur 0.<br/>
 Ex de première transaction : Personne1, Personne2, montant, date et heure, HASH(calculé avec les valeurs ci-avant et le hash précédent, ici '0').<br/>
+
+Comme précédement dans la version 2, la verification de l'intégrité des données sera verifié à chaque fois que l'on affiche la page d'accueil.<br/>
 
 ### Réexecuter les attaques précédentes
 Lorsque nous décidons d'attaquer directement notre fichier en modifiant une valeur, la fonction de vérification va détecter une anomalie est afficher que l'integrité des données n'est pas valide.<br/>
